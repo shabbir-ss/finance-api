@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from decimal import Decimal
 
 from app.api.deps import get_db, get_current_user
 from app.models.account import Account
@@ -91,6 +92,8 @@ def transfer_money(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    amount = Decimal(str(amount))  # 🔥 FIX
+
     from_acc = (
         db.query(Account)
         .filter(
